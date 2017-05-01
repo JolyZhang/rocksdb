@@ -161,11 +161,11 @@ bool blobf_compare_ttl::operator()(const std::shared_ptr<BlobFile>& lhs,
   return lhs->BlobFileNumber() > rhs->BlobFileNumber();
 }
 
-void EvictAllVersionsCompactionListener::OnCompaction(
-    int level, const Slice& key, CompactionListenerValueType value_type,
-    const Slice& existing_value, const SequenceNumber& sn, bool is_new) const {
+void EvictAllVersionsCompactionListener::InternalListener::OnCompaction(
+    int level, const Slice& key, CompactionEventListener::CompactionListenerValueType value_type,
+    const Slice& existing_value, const SequenceNumber& sn, bool is_new) {
   if (!is_new &&
-      value_type == EventListener::CompactionListenerValueType::kValue) {
+      value_type == CompactionEventListener::CompactionListenerValueType::kValue) {
     BlobHandle handle;
     Slice lsmval(existing_value);
     Status s = handle.DecodeFrom(&lsmval);
